@@ -4,7 +4,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
+import xyz.lana.lanaserver.dto.AddCartProductDTO;
 import xyz.lana.lanaserver.dto.CartDTO;
+import xyz.lana.lanaserver.dto.RemoveCartProductDTO;
 import xyz.lana.lanaserver.entity.Cart;
 import xyz.lana.lanaserver.entity.CartProduct;
 import xyz.lana.lanaserver.entity.Product;
@@ -43,29 +45,38 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Add product with a quantity to the cart
+     * Return the state of the cart
      *
-     * @param productId {@link String} Id of the product
-     * @param quantity  {@link int} Quantity of the product to add to the cart
      * @return State of the cart
      */
     @Override
-    public CartDTO addProduct(String productId, int quantity) {
+    public CartDTO get() {
+        return CartMapper.INSTANCE.CartToCartDTO(cart);
+    }
+
+    /**
+     * Add product with a quantity to the cart
+     *
+     * @param addProductDTO {@link AddCartProductDTO} Product and quantity to be added to the cart
+     * @return State of the cart
+     */
+    @Override
+    public CartDTO addProduct(AddCartProductDTO addProductDTO) {
 
         ValidationsCart.cartExist(cart);
 
-        Product optionalProduct = productRepository.findProductById(productId).orElseThrow(() -> new RuntimeException("Product to add in the cart does not exist"));
+        Product optionalProduct = productRepository.findProductById(addProductDTO.getProductId()).orElseThrow(() -> new RuntimeException("Product to add in the cart does not exist"));
 
-        int pos = posProductsCart(productId);
+        int pos = posProductsCart(addProductDTO.getProductId());
 
         if (pos != -1) {
             // Add the new quantity of product to the already existing one
             int quantityOld = cart.getProducts().get(pos).getQuantity();
-            int quantityNew = quantityOld + quantity;
+            int quantityNew = quantityOld + addProductDTO.getQuantity();
             cart.getProducts().get(pos).setQuantity(quantityNew);
         } else {
             // Add product to the cart because does not exist in the cart
-            CartProduct cartProduct = new CartProduct(productId, quantity);
+            CartProduct cartProduct = new CartProduct(addProductDTO.getProductId(), addProductDTO.getQuantity());
             cart.getProducts().add(cartProduct);
         }
 
@@ -98,23 +109,22 @@ public class CartServiceImpl implements CartService {
     /**
      * Remove product from the cart
      *
-     * @param productId {@link String} Id of the product
-     * @param quantity  [@link int} Quantity of the product to remove
+     * @param removeCartProductDTO {@link RemoveCartProductDTO} Product and quantity to be removed form the cart
      * @return State of the cart
      */
     @Override
-    public CartDTO deleteProduct(String productId, int quantity) {
+    public CartDTO deleteProduct(RemoveCartProductDTO removeCartProductDTO) {
         ValidationsCart.cartExist(cart);
 
-        int pos = posProductsCart(productId);
+        int pos = posProductsCart(removeCartProductDTO.getProductId());
 
         if (pos != -1) {
             int quantityOld = cart.getProducts().get(pos).getQuantity();
-            if (quantity < quantityOld) {
+            if (removeCartProductDTO.getQuantity() < quantityOld) {
                 // Update the quantity of the product in the cart
-                int quantityNew = quantityOld - quantity;
+                int quantityNew = quantityOld - removeCartProductDTO.getQuantity();
                 cart.getProducts().get(pos).setQuantity(quantityNew);
-            } else if (quantity == quantityOld) {
+            } else if (removeCartProductDTO.getQuantity() == quantityOld) {
                 // Remove product from the cart
                 cart.getProducts().remove(pos);
             } else {
@@ -157,7 +167,7 @@ public class CartServiceImpl implements CartService {
         for (CartProduct cartProduct : cart.getProducts()) {
             Product product = productRepository.findProductById(cartProduct.getProductId()).orElseThrow(() -> new RuntimeException("Product to add in the cart does not exist"));
             List<Promotion> promotions = promotionRepository.findPromotionsByProductId(cartProduct.getProductId());
-            totalAmount = totalAmount.add(calculateTotalCartProduct(promotions, product,cartProduct.getQuantity()));
+            totalAmount = totalAmount.add(calculateTotalCartProduct(promotions, product, cartProduct.getQuantity()));
         }
 
         cart.setAmount(totalAmount);
@@ -180,7 +190,7 @@ public class CartServiceImpl implements CartService {
             switch (promotion.getType()) {
                 case twoXOne:
                     // Promotions X for 1
-                    if(quantity > promotion.getMinQuantity()) {
+                    if (quantity > promotion.getMinQuantity()) {
                         int freeItems = quantity / promotion.getMinQuantity();
                         BigDecimal discountValue = priceProduct.multiply(BigDecimal.valueOf(freeItems));
                         finalAmount = finalAmount.subtract(discountValue);
@@ -188,7 +198,7 @@ public class CartServiceImpl implements CartService {
                     break;
                 case moreX:
                     // Promotions take X and receive Y discount
-                    if(quantity > promotion.getMinQuantity()) {
+                    if (quantity > promotion.getMinQuantity()) {
                         // quantity * amount * discount
                         BigDecimal discountValue = BigDecimal.valueOf(quantity).multiply(amount.multiply(BigDecimal.valueOf(promotion.getDiscount() / 100)));
                         finalAmount = finalAmount.subtract(discountValue);

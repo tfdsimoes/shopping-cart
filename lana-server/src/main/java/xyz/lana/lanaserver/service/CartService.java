@@ -1,6 +1,8 @@
 package xyz.lana.lanaserver.service;
 
+import xyz.lana.lanaserver.dto.AddCartProductDTO;
 import xyz.lana.lanaserver.dto.CartDTO;
+import xyz.lana.lanaserver.dto.RemoveCartProductDTO;
 
 import java.math.BigDecimal;
 
@@ -14,13 +16,19 @@ public interface CartService {
     CartDTO create();
 
     /**
-     * Add product with a quantity to the cart
+     * Return the state of the cart
      *
-     * @param productId {@link String} Id of the product
-     * @param quantity  {@link int} Quantity of the product to add to the cart
      * @return State of the cart
      */
-    CartDTO addProduct(String productId, int quantity);
+    CartDTO get();
+
+    /**
+     * Add product with a quantity to the cart
+     *
+     * @param addProductDTO {@link AddCartProductDTO} Product and quantity to be added to the cart
+     * @return State of the cart
+     */
+    CartDTO addProduct(AddCartProductDTO addProductDTO);
 
     /**
      * Get the total price of the cart
@@ -39,9 +47,8 @@ public interface CartService {
     /**
      * Remove product from the cart
      *
-     * @param productId {@link String} Id of the product
-     * @param quantity  [@link int} Quantity of the product to remove
+     * @param removeCartProductDTO {@link RemoveCartProductDTO} Product and quantity to be removed form the cart
      * @return State of the cart
      */
-    CartDTO deleteProduct(String productId, int quantity);
+    CartDTO deleteProduct(RemoveCartProductDTO removeCartProductDTO);
 }

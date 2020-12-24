@@ -3,6 +3,9 @@ package xyz.lana.lanaserver.controller;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xyz.lana.lanaserver.dto.AddCartProductDTO;
+import xyz.lana.lanaserver.dto.CartDTO;
+import xyz.lana.lanaserver.dto.RemoveCartProductDTO;
 import xyz.lana.lanaserver.service.CartService;
 
 import java.math.BigDecimal;
@@ -21,28 +24,33 @@ public class ShoppingCartService {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Void> create() {
-        cartService.create();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CartDTO> create() {
+        return ResponseEntity.ok(cartService.create());
+    }
+
+    @GetMapping(value = "")
+    public ResponseEntity<CartDTO> get() {
+        return ResponseEntity.ok(cartService.get());
+    }
+
+    @DeleteMapping(value = "")
+    public ResponseEntity<Boolean> delete() {
+        return ResponseEntity.ok(cartService.delete());
     }
 
     @PostMapping(value = "/product")
-    public ResponseEntity<String> addProduct(String idProduct) {
-        return (ResponseEntity<String>) ResponseEntity.notFound();
+
+    public ResponseEntity<CartDTO> addProduct(AddCartProductDTO addProductDTO) {
+        return ResponseEntity.ok(cartService.addProduct(addProductDTO));
     }
 
-    @GetMapping(value = "/{idCart}/total")
-    public ResponseEntity<BigDecimal> getTotal(@PathVariable("idCart") String idCart) {
-        return (ResponseEntity<BigDecimal>) ResponseEntity.notFound();
+    @GetMapping(value = "/total")
+    public ResponseEntity<BigDecimal> getTotal() {
+        return ResponseEntity.ok(cartService.total());
     }
 
-    @DeleteMapping(value = "/{idCart}")
-    public ResponseEntity<Boolean> delete(@PathVariable("idCart") String idCart) {
-        return (ResponseEntity<Boolean>) ResponseEntity.notFound();
-    }
-
-    @DeleteMapping(value = "/{idCart}/product/{idProduct}")
-    public ResponseEntity<Boolean> deleteProduct(@PathVariable("idCart") String idCart, @PathVariable("idProduct") String idProduct) {
-        return (ResponseEntity<Boolean>) ResponseEntity.notFound();
+    @DeleteMapping(value = "/product")
+    public ResponseEntity<CartDTO> deleteProduct(RemoveCartProductDTO removeCartProductDTO) {
+        return ResponseEntity.ok(cartService.deleteProduct(removeCartProductDTO));
     }
 }
