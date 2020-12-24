@@ -3,9 +3,8 @@ package xyz.lana.lanaserver.service.impl;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import xyz.lana.lanaserver.controller.dto.CartDTO;
+import xyz.lana.lanaserver.dto.CartDTO;
 import xyz.lana.lanaserver.entity.Cart;
 import xyz.lana.lanaserver.entity.CartProduct;
 import xyz.lana.lanaserver.entity.Product;
@@ -20,7 +19,6 @@ import java.util.List;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-@Transactional
 public class CartServiceImpl implements CartService {
 
     private final ProductRepository productRepository;

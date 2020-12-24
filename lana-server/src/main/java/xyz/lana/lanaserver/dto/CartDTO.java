@@ -1,4 +1,4 @@
-package xyz.lana.lanaserver.controller.dto;
+package xyz.lana.lanaserver.dto;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

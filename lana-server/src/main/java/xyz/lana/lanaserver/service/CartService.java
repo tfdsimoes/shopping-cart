@@ -1,7 +1,6 @@
 package xyz.lana.lanaserver.service;
 
-import xyz.lana.lanaserver.controller.dto.CartDTO;
-import xyz.lana.lanaserver.entity.Cart;
+import xyz.lana.lanaserver.dto.CartDTO;
 
 import java.math.BigDecimal;
 

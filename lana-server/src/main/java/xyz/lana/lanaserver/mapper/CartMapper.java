@@ -2,7 +2,7 @@ package xyz.lana.lanaserver.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import xyz.lana.lanaserver.controller.dto.CartDTO;
+import xyz.lana.lanaserver.dto.CartDTO;
 import xyz.lana.lanaserver.entity.Cart;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;

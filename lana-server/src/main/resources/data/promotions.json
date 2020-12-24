@@ -2,7 +2,7 @@
   {
     "id": "1",
     "code": "2x1",
-    "idProduct": 1,
+    "productId": 1,
     "discount": 100,
     "type": "twoXOne",
     "minQuantity": 2
@@ -10,7 +10,7 @@
   {
     "id": "2",
     "code": "more3",
-    "idProduct": 2,
+    "productId": 2,
     "discount": 25,
     "type": "moreX",
     "minQuantity": 3

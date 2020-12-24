@@ -1,4 +1,4 @@
-package xyz.lana.lanaserver.controller.dto;
+package xyz.lana.lanaserver.dto;
 
 public class CartProductDTO {
 
