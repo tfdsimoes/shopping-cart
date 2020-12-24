@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: lana-server
+
+security:
+  username: lana
+  password: lana
+
+data:
+  products: data/products.json
+  promotions: data/promotions.json
