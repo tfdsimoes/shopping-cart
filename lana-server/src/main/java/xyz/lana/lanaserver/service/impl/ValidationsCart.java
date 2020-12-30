@@ -1,6 +1,7 @@
 package xyz.lana.lanaserver.service.impl;
 
 import xyz.lana.lanaserver.entity.Cart;
+import xyz.lana.lanaserver.exception.CartNotFound;
 
 public class ValidationsCart {
 
@@ -11,7 +12,7 @@ public class ValidationsCart {
      */
     public static void cartExist(Cart cart)  {
         if (cart == null) {
-            throw new RuntimeException("Cart does not exist, initialize first");
+            throw new CartNotFound();
         }
     }
 }

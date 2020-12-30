@@ -11,6 +11,9 @@ import xyz.lana.lanaserver.entity.Cart;
 import xyz.lana.lanaserver.entity.CartProduct;
 import xyz.lana.lanaserver.entity.Product;
 import xyz.lana.lanaserver.entity.Promotion;
+import xyz.lana.lanaserver.exception.ProductCartNotFound;
+import xyz.lana.lanaserver.exception.ProductNotFound;
+import xyz.lana.lanaserver.exception.RemoveProductCart;
 import xyz.lana.lanaserver.mapper.CartMapper;
 import xyz.lana.lanaserver.repository.ProductRepository;
 import xyz.lana.lanaserver.repository.PromotionRepository;
@@ -27,7 +30,7 @@ public class CartServiceImpl implements CartService {
 
     private final PromotionRepository promotionRepository;
 
-    private Cart cart = new Cart();
+    private Cart cart = null;
 
     public CartServiceImpl(ProductRepository productRepository, PromotionRepository promotionRepository) {
         this.productRepository = productRepository;
@@ -41,7 +44,8 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public CartDTO create() {
-        return CartMapper.INSTANCE.CartToCartDTO(new Cart());
+        cart = new Cart();
+        return CartMapper.INSTANCE.CartToCartDTO(cart);
     }
 
     /**
@@ -51,6 +55,7 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public CartDTO get() {
+        ValidationsCart.cartExist(cart);
         return CartMapper.INSTANCE.CartToCartDTO(cart);
     }
 
@@ -65,7 +70,7 @@ public class CartServiceImpl implements CartService {
 
         ValidationsCart.cartExist(cart);
 
-        Product optionalProduct = productRepository.findProductById(addProductDTO.getProductId()).orElseThrow(() -> new RuntimeException("Product to add in the cart does not exist"));
+        Product optionalProduct = productRepository.findProductById(addProductDTO.getProductId()).orElseThrow(ProductNotFound::new);
 
         int pos = posProductsCart(addProductDTO.getProductId());
 
@@ -129,10 +134,10 @@ public class CartServiceImpl implements CartService {
                 cart.getProducts().remove(pos);
             } else {
                 // Error the quantity to remove is bigger than the existent in the cart
-                throw new RuntimeException("Quantity to delete is bigger then existent");
+                throw new RemoveProductCart();
             }
         } else {
-            throw new RuntimeException("Product does not exist in the cart");
+            throw new ProductCartNotFound();
         }
 
         calculateTotalCart();
@@ -165,7 +170,7 @@ public class CartServiceImpl implements CartService {
         BigDecimal totalAmount = BigDecimal.ZERO;
 
         for (CartProduct cartProduct : cart.getProducts()) {
-            Product product = productRepository.findProductById(cartProduct.getProductId()).orElseThrow(() -> new RuntimeException("Product to add in the cart does not exist"));
+            Product product = productRepository.findProductById(cartProduct.getProductId()).orElseThrow(ProductNotFound::new);
             List<Promotion> promotions = promotionRepository.findPromotionsByProductId(cartProduct.getProductId());
             totalAmount = totalAmount.add(calculateTotalCartProduct(promotions, product, cartProduct.getQuantity()));
         }
@@ -188,20 +193,19 @@ public class CartServiceImpl implements CartService {
 
         for (Promotion promotion : promotions) {
             switch (promotion.getType()) {
-                case twoXOne:
-                    // Promotions X for 1
-                    if (quantity > promotion.getMinQuantity()) {
+                case N_X_ONE:
+                    // Promotions pay for x and receive 1 free
+                    if (quantity >= promotion.getMinQuantity()) {
                         int freeItems = quantity / promotion.getMinQuantity();
                         BigDecimal discountValue = priceProduct.multiply(BigDecimal.valueOf(freeItems));
                         finalAmount = finalAmount.subtract(discountValue);
                     }
                     break;
-                case moreX:
+                case MORE_X:
                     // Promotions take X and receive Y discount
-                    if (quantity > promotion.getMinQuantity()) {
+                    if (quantity >= promotion.getMinQuantity()) {
                         // quantity * amount * discount
-                        BigDecimal discountValue = BigDecimal.valueOf(quantity).multiply(amount.multiply(BigDecimal.valueOf(promotion.getDiscount() / 100)));
-                        finalAmount = finalAmount.subtract(discountValue);
+                        finalAmount = amount.multiply(BigDecimal.ONE.subtract(BigDecimal.valueOf(promotion.getDiscount() / 100.0)));
                     }
                     break;
             }

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * Class with endpoints for cart resource
  */
 @RestController
-@RequestMapping(value = "/cart", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/cart", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShoppingCartService {
 
     private CartService cartService;
@@ -41,6 +41,10 @@ public class ShoppingCartService {
     @PostMapping(value = "/product")
 
     public ResponseEntity<CartDTO> addProduct(AddCartProductDTO addProductDTO) {
+        if (addProductDTO.getQuantity() < 1) {
+            ResponseEntity.badRequest();
+        }
+
         return ResponseEntity.ok(cartService.addProduct(addProductDTO));
     }
 
@@ -51,6 +55,10 @@ public class ShoppingCartService {
 
     @DeleteMapping(value = "/product")
     public ResponseEntity<CartDTO> deleteProduct(RemoveCartProductDTO removeCartProductDTO) {
+        if(removeCartProductDTO.getQuantity() < 1) {
+            ResponseEntity.badRequest();
+        }
+
         return ResponseEntity.ok(cartService.deleteProduct(removeCartProductDTO));
     }
 }
