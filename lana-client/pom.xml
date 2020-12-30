@@ -15,12 +15,20 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<spring.cloud.openfeign.version>3.0.0</spring.cloud.openfeign.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<version>${spring.cloud.openfeign.version}</version>
 		</dependency>
 	</dependencies>
 

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: lana-client
+
+server:
+  port: 8082
+
+lana-server:
+  url: lana-server:8081
+  security:
+    username: ${USERNAME}
+    password: ${PASSWORD}
