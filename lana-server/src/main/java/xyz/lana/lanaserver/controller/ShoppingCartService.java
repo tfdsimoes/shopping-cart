@@ -39,7 +39,6 @@ public class ShoppingCartService {
     }
 
     @PostMapping(value = "/product")
-
     public ResponseEntity<CartDTO> addProduct(AddCartProductDTO addProductDTO) {
         if (addProductDTO.getQuantity() < 1) {
             ResponseEntity.badRequest();
