@@ -6,9 +6,9 @@ server:
   port: 8081
 
 security:
-  username: lana
-  password: lana
+  username: ${USERNAME}
+  password: ${PASSWORD}
 
 data:
-  products: data/products.json
-  promotions: data/promotions.json
+  products: /data/products.json
+  promotions: /data/promotions.json
