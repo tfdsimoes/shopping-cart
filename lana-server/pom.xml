@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>xyz.lana</groupId>
-    <artifactId>private-server</artifactId>
+    <artifactId>lana-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>lana-server</name>
 
@@ -12,7 +12,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.1</version>
-        <relativePath/>
     </parent>
 
     <properties>
