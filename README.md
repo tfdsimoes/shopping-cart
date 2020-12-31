@@ -7,19 +7,23 @@ Note the instructions are made for linux system.
 ## Requirements
 
 To build these project is necessary to have Java 11 and Maven 3 installed.
+
 To run is need Docker 20.10 and Docker-Compose 1.27
 
 ## Projects in repository
 * lana-server
 Service responsible of all operations related to the cart, contains in files the products and promotions available. The service is running in the port `8081` and only can be accessed inside the private network of docker.
+
 The endpoints of these service are protected with basic authentication.
 
 * lana-client
 These service is responsible to receive the requests from the client and redirect them to the lana-server.
+
 These service is running in port `8080` and can be accessed by outside by anyone.
 
 ## Tests
 In the lana-client there is no tests, but in the lana-server there is tests in the part of the cart service.
+
 The tests evaluate the operations of create, get and delete cart, get total value of a cart, add or remove product from the cart and the calculation of promotions with the products in the cart.
 
 ## Building and running
