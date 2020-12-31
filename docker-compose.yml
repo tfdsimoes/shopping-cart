@@ -1,0 +1,34 @@
+version: "3.9"
+
+networks:
+    public-network:
+    private-network:
+        internal: true
+
+services:
+    lana-server:
+        image: xyz.lana/lana-server:0.0.1-SNAPSHOT
+        container_name: lana-server
+        networks:
+            - private-network
+        ports:
+            - "8081:8081"
+        environment:
+            USERNAME: lana
+            PASSWORD: lana
+
+    lana-client:
+        image: xyz.lana/lana-client:0.0.1-SNAPSHOT
+        container_name: lana-client
+        depends_on:
+            - lana-server
+        networks:
+            - public-network
+            - private-network
+        ports:
+            - "8080:8080"
+        expose:
+            - "8080"
+        environment:
+            USERNAME: lana
+            PASSWORD: lana
