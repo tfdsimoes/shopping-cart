@@ -3,7 +3,7 @@ spring:
     name: lana-client
 
 server:
-  port: 8082
+  port: 8080
 
 lana-server:
   url: lana-server:8081

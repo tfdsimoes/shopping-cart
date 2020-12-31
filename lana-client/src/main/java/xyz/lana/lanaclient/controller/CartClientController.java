@@ -21,32 +21,32 @@ public class CartClientController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<CartDTO> create() {
-        return lanaClient.create();
+    public ResponseEntity<CartDTO> createCart(@RequestHeader(value = "Cookie", required = true) String session) {
+        return lanaClient.create(session);
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<CartDTO> get() {
-        return lanaClient.get();
+    public ResponseEntity<CartDTO> get(@RequestHeader(value = "Cookie", required = true) String session) {
+        return lanaClient.get(session);
     }
 
     @DeleteMapping(value = "")
-    public ResponseEntity<Boolean> delete() {
-        return lanaClient.delete();
+    public ResponseEntity<Boolean> delete(@RequestHeader(value = "Cookie", required = true) String session) {
+        return lanaClient.delete(session);
     }
 
     @PostMapping(value = "/product")
-    public ResponseEntity<CartDTO> addProduct(AddCartProductDTO addCartProductDTO) {
-        return lanaClient.addProduct(addCartProductDTO);
+    public ResponseEntity<CartDTO> addProduct(@RequestHeader(value = "Cookie", required = true) String session, AddCartProductDTO addCartProductDTO) {
+        return lanaClient.addProduct(session, addCartProductDTO);
     }
 
     @GetMapping(value = "/total")
-    public ResponseEntity<BigDecimal> getTotal() {
-        return lanaClient.getTotal();
+    public ResponseEntity<BigDecimal> getTotal(@RequestHeader(value = "Cookie", required = true) String session) {
+        return lanaClient.getTotal(session);
     }
 
     @DeleteMapping(value = "/product")
-    public ResponseEntity<CartDTO> deleteProduct(RemoveCartProductDTO removeCartProductDTO) {
-        return lanaClient.deleteProduct(removeCartProductDTO);
+    public ResponseEntity<CartDTO> deleteProduct(@RequestHeader(value = "Cookie", required = true) String session, RemoveCartProductDTO removeCartProductDTO) {
+        return lanaClient.deleteProduct(session, removeCartProductDTO);
     }
 }
