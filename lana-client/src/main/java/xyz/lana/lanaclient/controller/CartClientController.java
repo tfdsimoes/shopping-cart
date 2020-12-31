@@ -36,7 +36,10 @@ public class CartClientController {
     }
 
     @PostMapping(value = "/product")
-    public ResponseEntity<CartDTO> addProduct(@RequestHeader(value = "Cookie", required = true) String session, AddCartProductDTO addCartProductDTO) {
+    public ResponseEntity<CartDTO> addProduct(
+            @RequestHeader(value = "Cookie", required = true) String session,
+            @RequestBody AddCartProductDTO addCartProductDTO)
+    {
         return lanaClient.addProduct(session, addCartProductDTO);
     }
 
@@ -46,7 +49,10 @@ public class CartClientController {
     }
 
     @DeleteMapping(value = "/product")
-    public ResponseEntity<CartDTO> deleteProduct(@RequestHeader(value = "Cookie", required = true) String session, RemoveCartProductDTO removeCartProductDTO) {
+    public ResponseEntity<CartDTO> deleteProduct(
+            @RequestHeader(value = "Cookie", required = true) String session,
+            @RequestBody RemoveCartProductDTO removeCartProductDTO)
+    {
         return lanaClient.deleteProduct(session, removeCartProductDTO);
     }
 }

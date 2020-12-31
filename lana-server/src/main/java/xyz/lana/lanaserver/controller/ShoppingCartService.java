@@ -39,7 +39,7 @@ public class ShoppingCartService {
     }
 
     @PostMapping(value = "/product")
-    public ResponseEntity<CartDTO> addProduct(AddCartProductDTO addProductDTO) {
+    public ResponseEntity<CartDTO> addProduct(@RequestBody AddCartProductDTO addProductDTO) {
         if (addProductDTO.getQuantity() < 1) {
             ResponseEntity.badRequest();
         }
@@ -53,7 +53,7 @@ public class ShoppingCartService {
     }
 
     @DeleteMapping(value = "/product")
-    public ResponseEntity<CartDTO> deleteProduct(RemoveCartProductDTO removeCartProductDTO) {
+    public ResponseEntity<CartDTO> deleteProduct(@RequestBody RemoveCartProductDTO removeCartProductDTO) {
         if(removeCartProductDTO.getQuantity() < 1) {
             ResponseEntity.badRequest();
         }
