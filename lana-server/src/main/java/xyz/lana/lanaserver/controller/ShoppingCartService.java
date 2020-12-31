@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @RequestMapping(value = "/cart", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShoppingCartService {
 
-    private CartService cartService;
+    private final CartService cartService;
 
     private ShoppingCartService(CartService cartService) {
         this.cartService = cartService;

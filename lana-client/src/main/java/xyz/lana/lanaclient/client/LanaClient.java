@@ -1,7 +1,6 @@
 package xyz.lana.lanaclient.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,7 @@ import xyz.lana.lanaclient.dto.RemoveCartProductDTO;
 import java.math.BigDecimal;
 
 @FeignClient(name = "lana-client", url = "${lana-server.url}", configuration = FeignServiceConfiguration.class)
-@RequestMapping(value = "/cart", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/cart")
 public interface LanaClient {
 
     @PostMapping(value = "")
