@@ -1,3 +1,3 @@
-# Private Server
+# Lana Server
 
-Place where all the operations related to the management of the cart are taking care
+Project that takes care of all operations related to the cart 
