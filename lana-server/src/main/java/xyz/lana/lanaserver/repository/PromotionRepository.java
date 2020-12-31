@@ -5,7 +5,6 @@ import xyz.lana.lanaserver.entity.Promotion;
 
 import java.util.List;
 
-@Repository
 public interface PromotionRepository {
 
     /**

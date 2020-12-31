@@ -5,7 +5,6 @@ import xyz.lana.lanaserver.entity.Product;
 
 import java.util.Optional;
 
-@Repository
 public interface ProductRepository {
 
     /**
